@@ -103,7 +103,10 @@ private let DefaultInnerLineHeight: Int = 21
             setHTML(html)
         }
     }
-    
+    /// Text representation of the data that has been input into the editor view, if it has been loaded.
+    public var text: String {
+        return runJS("RE.getText()")
+    }
     /// Private variable that holds the placeholder text, so you can set the placeholder before the editor loads.
     private var placeholderText: String = ""
     /// The placeholder text that should be shown when there is no user input.
