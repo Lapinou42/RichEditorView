@@ -19,30 +19,50 @@ class ViewController: UIViewController {
         toolbar.options = RichEditorDefaultOption.all
         return toolbar
     }()
-
+    var keyboardManager: KeyboardManager?
     override func viewDidLoad() {
         super.viewDidLoad()
         
         editorView.delegate = self
         editorView.inputAccessoryView = toolbar
-        editorView.placeholder = "Type some text..."
-
+        editorView.placeholder = "Edit here"
+        
         toolbar.delegate = self
-        toolbar.editor = editorView
-
-        // We will create a custom action that clears all the input text when it is pressed
-        let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
-            toolbar.editor?.html = ""
+        if let tmpKeyboardManager = self.keyboardManager {
+            tmpKeyboardManager.toolbar.editor = self.editorView
+        } else {
+            keyboardManager = KeyboardManager(view: self.view)
         }
-
-        var options = toolbar.options
-        options.append(item)
-        toolbar.options = options
+        //        toolbar.editor = editorView
+        editorView.html = "<b>Jesus is God.</b> He saves by grace through faith alone. Soli Deo gloria! <a href='https://perfectGod.com'>perfectGod.com</a>"
+        // This will create a custom action that clears all the input text when it is pressed
+        //        let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
+        //            toolbar?.editor?.html = ""
+        //        }
+        //
+        //        var options = toolbar.options
+        //        options.append(item)
+        //        toolbar.options = options
     }
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if let tmpKeyboardManager = self.keyboardManager {
+            tmpKeyboardManager.beginMonitoring()
+        } else {
+            keyboardManager = KeyboardManager(view: self.view)
+        }
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        if let tmpKeyboardManager = self.keyboardManager {
+            tmpKeyboardManager.stopMonitoring()
+        }
+    }
 }
 
 extension ViewController: RichEditorDelegate {
+
+    func richEditor(_ editor: RichEditorView, heightDidChange height: Int) { }
 
     func richEditor(_ editor: RichEditorView, contentDidChange content: String) {
         if content.isEmpty {
@@ -51,21 +71,31 @@ extension ViewController: RichEditorDelegate {
             htmlTextView.text = content
         }
     }
+
+    func richEditorTookFocus(_ editor: RichEditorView) { }
+    
+    func richEditorLostFocus(_ editor: RichEditorView) { }
+    
+    func richEditorDidLoad(_ editor: RichEditorView) { }
+    
+    func richEditor(_ editor: RichEditorView, shouldInteractWith url: URL) -> Bool { return true }
+
+    func richEditor(_ editor: RichEditorView, handleCustomAction content: String) { }
     
 }
 
 extension ViewController: RichEditorToolbarDelegate {
 
     fileprivate func randomColor() -> UIColor {
-        let colors: [UIColor] = [
-            .red,
-            .orange,
-            .yellow,
-            .green,
-            .blue,
-            .purple
+        let colors = [
+            UIColor.red,
+            UIColor.orange,
+            UIColor.yellow,
+            UIColor.green,
+            UIColor.blue,
+            UIColor.purple
         ]
-        
+
         let color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
         return color
     }
@@ -86,8 +116,8 @@ extension ViewController: RichEditorToolbarDelegate {
 
     func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
         // Can only add links to selected text, so make sure there is a range selection first
-        if toolbar.editor?.hasRangeSelection == true {
-            toolbar.editor?.insertLink("http://github.com/cjwirth/RichEditorView", title: "Github Link")
-        }
+//        if let hasSelection = toolbar.editor?.rangeSelectionExists(), hasSelection {
+//            toolbar.editor?.insertLink("http://github.com/cjwirth/RichEditorView", title: "Github Link")
+//        }
     }
 }

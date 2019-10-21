@@ -15,11 +15,7 @@
  */
  "use strict";
 
-var RE = {};
-
-window.onload = function() {
-    RE.callback("ready");
-};
+const RE = {};
 
 RE.editor = document.getElementById('editor');
 
@@ -78,6 +74,7 @@ RE.runCallbackQueue = function() {
 
     setTimeout(function() {
         window.location.href = "re-callback://";
+        //window.webkit.messageHandlers.iOS_Native_FlushMessageQueue.postMessage("re-callback://")
     }, 0);
 };
 
@@ -122,7 +119,7 @@ RE.setPlaceholderText = function(text) {
 };
 
 RE.updatePlaceholder = function() {
-    if (RE.editor.innerHTML.indexOf('img') !== -1 || (RE.editor.textContent.length > 0 && RE.editor.innerHTML.length > 0)) {
+    if (RE.editor.innerHTML.indexOf('img') !== -1 || RE.editor.innerHTML.length > 0) {
         RE.editor.classList.remove("placeholder");
     } else {
         RE.editor.classList.add("placeholder");
@@ -407,7 +404,7 @@ RE.getRelativeCaretYPosition = function() {
             y = range.startContainer.offsetTop - window.pageYOffset;
         } else {
             if (range.getClientRects) {
-                var rects=range.getClientRects();
+                var rects = range.getClientRects();
                 if (rects.length > 0) {
                     y = rects[0].top;
                 }
@@ -416,4 +413,8 @@ RE.getRelativeCaretYPosition = function() {
     }
 
     return y;
+};
+
+window.onload = function() {
+    RE.callback("ready");
 };
