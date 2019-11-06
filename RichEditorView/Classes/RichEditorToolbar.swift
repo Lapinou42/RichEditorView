@@ -73,10 +73,13 @@ import UIKit
     private var toolbar: UIToolbar
     private var backgroundToolbar: UIToolbar
     
+    private var decelerationRate: UIScrollView.DecelerationRate
+    
     public override init(frame: CGRect) {
         toolbarScroll = UIScrollView()
         toolbar = UIToolbar()
         backgroundToolbar = UIToolbar()
+        decelerationRate = .fast
         super.init(frame: frame)
         setup()
     }
@@ -85,6 +88,7 @@ import UIKit
         toolbarScroll = UIScrollView()
         toolbar = UIToolbar()
         backgroundToolbar = UIToolbar()
+        decelerationRate = .fast
         super.init(coder: aDecoder)
         setup()
     }
@@ -106,6 +110,7 @@ import UIKit
         toolbarScroll.showsHorizontalScrollIndicator = false
         toolbarScroll.showsVerticalScrollIndicator = false
         toolbarScroll.backgroundColor = .clear
+        toolbarScroll.decelerationRate = decelerationRate
 
         toolbarScroll.addSubview(toolbar)
 

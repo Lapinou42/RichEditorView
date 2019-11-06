@@ -1,5 +1,5 @@
 PODS:
-  - RichEditorView (4.0)
+  - RichEditorView (4.1.0)
 
 DEPENDENCIES:
   - RichEditorView (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  RichEditorView: 6c464278b957b9c0961ca641e83324f9140cc84d
+  RichEditorView: ffbb3f7c6224bbbdadfe9c01d385d34f59106d50
 
 PODFILE CHECKSUM: cb2ef857fe6d826f0a9974fbfdb83ee1fbc5e9cb
 

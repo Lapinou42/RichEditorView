@@ -41,7 +41,7 @@ body {
     height: 100%;
 }
 
-#editor {
+#editor  {
     -webkit-user-select: auto !important;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     overflow: auto;
@@ -60,6 +60,10 @@ body {
     color: #ccc;
 }
 
-h1, p, ul, ol {
+p, ul, ol {
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }

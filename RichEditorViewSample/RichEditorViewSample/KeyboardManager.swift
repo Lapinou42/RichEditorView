@@ -26,10 +26,12 @@ class KeyboardManager: NSObject {
     */
     var toolbar: RichEditorToolbar
 
-    init(view: UIView) {
+    init(view: UIView, toolbar: RichEditorToolbar) {
+        
         self.view = view
-        toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: view.bounds.height, width: view.bounds.width, height: 44))
-//        toolbar.options = RichEditorOptions.all()
+        self.toolbar = toolbar
+        
+        super.init()
     }
 
     /**
@@ -64,7 +66,7 @@ class KeyboardManager: NSObject {
             UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
                 if let view = self.view {
                     self.toolbar.frame.origin.y = view.frame.height - (keyboardRect.height + self.toolbar.frame.height)
-                    self.toolbar.options = RichEditorDefaultOption.all
+                    view.layoutIfNeeded()
                 }
             }, completion: nil)
 
@@ -73,6 +75,7 @@ class KeyboardManager: NSObject {
             UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
                 if let view = self.view {
                     self.toolbar.frame.origin.y = view.frame.height
+                    view.layoutIfNeeded()
                 }
             }, completion: nil)
         }

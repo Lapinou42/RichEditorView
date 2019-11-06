@@ -13,28 +13,49 @@ class ViewController: UIViewController {
 
     @IBOutlet var editorView: RichEditorView!
     @IBOutlet var htmlTextView: UITextView!
+    
+    private lazy var editorOptions: [RichEditorDefaultOption] = {
+        return RichEditorDefaultOption.all// [.header(1), .header(2), .header(3), .header(4), .header(5), .header(6)]
+    }()
 
-    lazy var toolbar: RichEditorToolbar = {
-        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 44))
-        toolbar.options = RichEditorDefaultOption.all
+    private lazy var toolbar: RichEditorToolbar = {
+        
+        let toolbar = RichEditorToolbar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 44))
+        toolbar.delegate = self
+        
+        if #available(iOS 13.0, *) {
+            toolbar.options = editorOptions
+            editorView.inputAccessoryView = toolbar
+        } else {
+            toolbar.options = editorOptions
+            editorView.inputAccessoryView = toolbar
+        }
+        
+        toolbar.editor = editorView
+        
         return toolbar
     }()
-    var keyboardManager: KeyboardManager?
+    
+    private lazy var keyboardManager: KeyboardManager? = {
+        if #available(iOS 13.0, *) {
+            toolbar.editor = editorView
+            return nil
+        } else {
+            
+            var km = KeyboardManager(view: self.view, toolbar: self.toolbar)
+            editorView.inputAccessoryView = self.toolbar
+            return km
+        }
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         editorView.delegate = self
-        editorView.inputAccessoryView = toolbar
         editorView.placeholder = "Edit here"
         
-        toolbar.delegate = self
-        if let tmpKeyboardManager = self.keyboardManager {
-            tmpKeyboardManager.toolbar.editor = self.editorView
-        } else {
-            keyboardManager = KeyboardManager(view: self.view)
-        }
-        //        toolbar.editor = editorView
         editorView.html = "<b>Jesus is God.</b> He saves by grace through faith alone. Soli Deo gloria! <a href='https://perfectGod.com'>perfectGod.com</a>"
+        
         // This will create a custom action that clears all the input text when it is pressed
         //        let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
         //            toolbar?.editor?.html = ""
@@ -44,18 +65,28 @@ class ViewController: UIViewController {
         //        options.append(item)
         //        toolbar.options = options
     }
+    
+    func keyboardDisplayDoesNotRequireUserAction() {
+        
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        if let tmpKeyboardManager = self.keyboardManager {
-            tmpKeyboardManager.beginMonitoring()
-        } else {
-            keyboardManager = KeyboardManager(view: self.view)
+        
+        if let km = self.keyboardManager {
+            km.beginMonitoring()
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        if let tmpKeyboardManager = self.keyboardManager {
-            tmpKeyboardManager.stopMonitoring()
+        
+        if let km = self.keyboardManager {
+            km.stopMonitoring()
         }
     }
 }
@@ -72,11 +103,17 @@ extension ViewController: RichEditorDelegate {
         }
     }
 
-    func richEditorTookFocus(_ editor: RichEditorView) { }
+    func richEditorTookFocus(_ editor: RichEditorView) {
+
+    }
     
-    func richEditorLostFocus(_ editor: RichEditorView) { }
+    func richEditorLostFocus(_ editor: RichEditorView) {
+
+    }
     
-    func richEditorDidLoad(_ editor: RichEditorView) { }
+    func richEditorDidLoad(_ editor: RichEditorView) {
+        editorView.focus()
+    }
     
     func richEditor(_ editor: RichEditorView, shouldInteractWith url: URL) -> Bool { return true }
 
