@@ -6,7 +6,7 @@ RichEditorView
 
 RichEditorView is a simple, modular, drop-in UIView subclass for Rich Text Editing (`WKWebView` wrapper).
 
-Written in Swift 4.0 (Xcode 11.x)
+Written in Swift 5.0 (Xcode 11.x)
 
 Supports iOS 10 through CocoaPods or Carthage.
 
