@@ -192,6 +192,10 @@ RE.setHeading = function(heading) {
     document.execCommand('formatBlock', false, '<h' + heading + '>');
 };
 
+RE.setParagraph = function() {
+    document.execCommand('formatBlock', false, '<div>');
+}
+
 RE.setIndent = function() {
     document.execCommand('indent', false, null);
 };
