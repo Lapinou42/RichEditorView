@@ -65,6 +65,7 @@ public enum RichEditorDefaultOption: RichEditorOption {
     case textColor
     case textBackgroundColor
     case header(Int)
+    case paragraph
     case indent
     case outdent
     case orderedList
@@ -80,6 +81,7 @@ public enum RichEditorDefaultOption: RichEditorOption {
         .undo, .redo, .bold, .italic,
         .subscript, .superscript, .strike, .underline,
         .textColor, .textBackgroundColor,
+        .paragraph,
         .header(1), .header(2), .header(3), .header(4), .header(5), .header(6),
         .indent, outdent, orderedList, unorderedList,
         .alignLeft, .alignCenter, .alignRight, .image, .link
@@ -102,6 +104,7 @@ public enum RichEditorDefaultOption: RichEditorOption {
         case .textColor: name = "text_color"
         case .textBackgroundColor: name = "bg_color"
         case .header(let h): name = "h\(h)"
+        case .paragraph: name = "paragraph"
         case .indent: name = "indent"
         case .outdent: name = "outdent"
         case .orderedList: name = "ordered_list"
@@ -131,6 +134,7 @@ public enum RichEditorDefaultOption: RichEditorOption {
         case .textColor: return NSLocalizedString("Color", comment: "")
         case .textBackgroundColor: return NSLocalizedString("BG Color", comment: "")
         case .header(let h): return NSLocalizedString("H\(h)", comment: "")
+        case .paragraph: return NSLocalizedString("Paragraph", comment: "")
         case .indent: return NSLocalizedString("Indent", comment: "")
         case .outdent: return NSLocalizedString("Outdent", comment: "")
         case .orderedList: return NSLocalizedString("Ordered List", comment: "")
@@ -157,6 +161,7 @@ public enum RichEditorDefaultOption: RichEditorOption {
         case .textColor: toolbar.delegate?.richEditorToolbarChangeTextColor?(toolbar)
         case .textBackgroundColor: toolbar.delegate?.richEditorToolbarChangeBackgroundColor?(toolbar)
         case .header(let h): toolbar.editor?.header(h)
+        case .paragraph: toolbar.editor?.paragraph()
         case .indent: toolbar.editor?.indent()
         case .outdent: toolbar.editor?.outdent()
         case .orderedList: toolbar.editor?.orderedList()

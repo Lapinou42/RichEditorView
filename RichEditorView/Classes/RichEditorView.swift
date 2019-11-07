@@ -302,6 +302,10 @@
             runJS("RE.setHeading('\(h)')")
         }
         
+        public func paragraph() {
+            runJS("RE.setParagraph()")
+        }
+        
         public func indent() {
             runJS("RE.setIndent()")
         }
