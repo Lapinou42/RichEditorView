@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  RichEditorViewSample
+
+  Created by Christophe Chantraine on 18/11/2019.
+  Copyright © 2019 Caesar Wirth. All rights reserved.
+*/
+
+"tool_text_back"="Back";
+"tool_text_undo"="Undo";
+"tool_text_redo"="Redo";
+"tool_text_bold"="Bold";
+"tool_text_italic"="Italic";
+"tool_text_underline"="Underline";
+"tool_text_sizes"="Sizes";
+"tool_text_size_1"="Very small";
+"tool_text_size_2"="Small";
+"tool_text_size_3"="Medium";
+"tool_text_size_4"="Normal";
+"tool_text_size_5"="Large";
+"tool_text_size_6"="Very large";
+"tool_text_size_7"="Extra large";
+"tool_text_sizes"="Alignments";
+"tool_text_align_left"="Left";
+"tool_text_align_center"="Center";
+"tool_text_align_right"="Right";
+"tool_text_align_justified"="Justified";

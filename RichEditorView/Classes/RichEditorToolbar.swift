@@ -11,6 +11,9 @@ import UIKit
 /// Used to receive actions that need extra work to perform (eg. display some UI)
 @objc public protocol RichEditorToolbarDelegate: class {
 
+    /// Called when the Back toolbar item is pressed.
+    @objc optional func richEditorToolbarBackToRoot(_ toolbar: RichEditorToolbar)
+    
     /// Called when the Text Color toolbar item is pressed.
     @objc optional func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar)
 
@@ -22,24 +25,51 @@ import UIKit
 
     /// Called when the Insert Link toolbar item is pressed.
     @objc optional func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar)
+    
+    /// Called when the Font Sizes toolbar item is pressed.
+    @objc optional func richEditorToolbarChangeFontSize(_ toolbar: RichEditorToolbar)
 }
 
 /// RichBarButtonItem is a subclass of UIBarButtonItem that takes a callback as opposed to the target-action pattern
 @objcMembers open class RichBarButtonItem: UIBarButtonItem {
     open var actionHandler: (() -> Void)?
     
-    public convenience init(image: UIImage? = nil, handler: (() -> Void)? = nil) {
+    private(set) var size: CGSize = .zero
+    private(set) var font: UIFont = UIFont.systemFont(ofSize: 14)
+    
+    public convenience init(image: UIImage? = nil,
+                            handler: (() -> Void)? = nil) {
+        
         self.init(image: image, style: .plain, target: nil, action: nil)
+        
         target = self
         action = #selector(RichBarButtonItem.buttonWasTapped)
-        actionHandler = handler
+        
+        self.actionHandler = handler
+        
+        let minS = min(image?.size.width ?? 28, image?.size.height ?? 28)
+        self.size = CGSize(width: minS, height: minS)
     }
     
-    public convenience init(title: String = "", handler: (() -> Void)? = nil) {
+    public convenience init(title: String = "",
+                            font: UIFont = UIFont.systemFont(ofSize: 14),
+                            handler: (() -> Void)? = nil) {
+        
         self.init(title: title, style: .plain, target: nil, action: nil)
+        
         target = self
         action = #selector(RichBarButtonItem.buttonWasTapped)
-        actionHandler = handler
+                
+        self.actionHandler = handler
+        self.font = font
+        
+        let attributes: [NSAttributedString.Key : Any] = [.font: self.font]
+        self.setTitleTextAttributes(attributes, for: .normal)
+        self.setTitleTextAttributes(attributes, for: .selected)
+
+        let titleSize = title.size(withAttributes:[.font: self.font])
+        let fixedSize = CGSize(width: titleSize.width + 12, height: titleSize.height)
+        self.size = fixedSize
     }
     
     @objc func buttonWasTapped() {
@@ -55,6 +85,9 @@ import UIKit
 
     /// A reference to the RichEditorView that it should be performing actions on
     open weak var editor: RichEditorView?
+    
+    /// Center or not the toolbar items
+    open var centered: Bool = false
 
     /// The list of options to be displayed on the toolbar
     open var options: [RichEditorOption] = [] {
@@ -120,7 +153,9 @@ import UIKit
     }
     
     private func updateToolbar() {
-        var buttons = [UIBarButtonItem]()
+        
+        var buttons = [RichBarButtonItem]()
+        
         for option in options {
             let handler = { [weak self] in
                 if let strongSelf = self {
@@ -137,16 +172,18 @@ import UIKit
                 buttons.append(button)
             }
         }
-        toolbar.items = buttons
+        
+        if centered {
+            buttons.insert(RichBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), at: 0)
+            buttons.insert(RichBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), at: buttons.count)
+        }
+        
+        toolbar.setItems(buttons, animated: true)
 
-        let defaultIconWidth: CGFloat = 28
         let barButtonItemMargin: CGFloat = 12
-        let width: CGFloat = buttons.reduce(0) {sofar, new in
-            if let view = new.value(forKey: "view") as? UIView {
-                return sofar + view.frame.size.width + barButtonItemMargin
-            } else {
-                return sofar + (defaultIconWidth + barButtonItemMargin)
-            }
+        
+        let width: CGFloat = buttons.reduce(0) { sofar, new in
+            return sofar + (new.size.width + barButtonItemMargin)
         }
         
         if width < frame.size.width {
@@ -155,7 +192,7 @@ import UIKit
             toolbar.frame.size.width = width + barButtonItemMargin
         }
         toolbar.frame.size.height = 44
-        toolbarScroll.contentSize.width = width
+        toolbarScroll.contentSize.width = width + barButtonItemMargin
     }
     
 }

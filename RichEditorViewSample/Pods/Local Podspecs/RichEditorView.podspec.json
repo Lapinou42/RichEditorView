@@ -12,14 +12,19 @@
     "tag": "5.1.1"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "11.0"
   },
   "swift_versions": "5.0",
   "requires_arc": true,
-  "source_files": "RichEditorView/Classes/*",
+  "source_files": "RichEditorView/Classes/**/*",
   "resources": [
     "RichEditorView/Assets/icons/*",
     "RichEditorView/Assets/editor/*"
   ],
+  "dependencies": {
+    "Gridicons": [
+      "~> 0.19"
+    ]
+  },
   "swift_version": "5.0"
 }

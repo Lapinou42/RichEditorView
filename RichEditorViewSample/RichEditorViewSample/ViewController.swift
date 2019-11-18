@@ -8,15 +8,63 @@
 
 import UIKit
 import RichEditorView
+import Gridicons
 
 class ViewController: UIViewController {
 
     @IBOutlet var editorView: RichEditorView!
     @IBOutlet var htmlTextView: UITextView!
     
-    private lazy var editorOptions: [RichEditorDefaultOption] = {
-        return RichEditorDefaultOption.all// [.header(1), .header(2), .header(3), .header(4), .header(5), .header(6)]
+    private lazy var editorOptions: [RichEditorOption] = {
+        var options: [RichEditorOption] = [self.fontSizesItem,
+                                           RichEditorDefaultOption.bold,
+                                           RichEditorDefaultOption.italic,
+                                           RichEditorDefaultOption.underline,
+                                           self.alignItem]
+        
+        //options.insert(self.alignItem, at: options.count)
+        //options.insert(self.fontSizesItem, at: options.count)
+
+        return options
     }()
+    
+    private lazy var fontSizesEditorOptions: [RichEditorDefaultOption] = {
+        return [.fontSize(1),
+                .fontSize(2),
+                .fontSize(3),
+                .fontSize(4),
+                .fontSize(5),
+                .fontSize(6),
+                .fontSize(7)]
+    }()
+    
+    private lazy var alignTextEditorOptions: [RichEditorDefaultOption] = {
+        return [.alignLeft,
+                .alignCenter,
+                .alignRight,
+                .alignJustify]
+    }()
+    
+    private lazy var backItem: RichEditorOptionItem = RichEditorOptionItem(image: Gridicon.iconOfType(.arrowLeft), title: "tool_text_back") { toolbar in
+        toolbar.options = self.editorOptions
+    }
+    
+    private lazy var fontSizesItem: RichEditorOptionItem = RichEditorOptionItem(image: UIImage(named: "text_size_icon",
+                                                                                               in: Bundle(for: RichEditorView.self),
+                                                                                               compatibleWith: nil), title: "tool_text_sizes") { toolbar in
+                                                                                                
+                                                                                                var options: [RichEditorOption] = self.fontSizesEditorOptions
+                                                                                                options.insert(self.backItem, at: 0)
+                                                                                                
+                                                                                                toolbar.options = options
+    }
+    
+    private lazy var alignItem: RichEditorOptionItem = RichEditorOptionItem(image: Gridicon.iconOfType(.alignLeft), title: "tool_text_alignments") { toolbar in
+        
+        var options: [RichEditorOption] = self.alignTextEditorOptions
+        options.insert(self.backItem, at: 0)
+        toolbar.options = options
+    }
 
     private lazy var toolbar: RichEditorToolbar = {
         
@@ -55,15 +103,6 @@ class ViewController: UIViewController {
         editorView.placeholder = "Edit here"
         
         editorView.html = "<b>Jesus is God.</b> He saves by grace through faith alone. Soli Deo gloria! <a href='https://perfectGod.com'>perfectGod.com</a>"
-        
-        // This will create a custom action that clears all the input text when it is pressed
-        //        let item = RichEditorOptionItem(image: nil, title: "Clear") { toolbar in
-        //            toolbar?.editor?.html = ""
-        //        }
-        //
-        //        var options = toolbar.options
-        //        options.append(item)
-        //        toolbar.options = options
     }
     
     func keyboardDisplayDoesNotRequireUserAction() {
@@ -122,39 +161,5 @@ extension ViewController: RichEditorDelegate {
 }
 
 extension ViewController: RichEditorToolbarDelegate {
-
-    fileprivate func randomColor() -> UIColor {
-        let colors = [
-            UIColor.red,
-            UIColor.orange,
-            UIColor.yellow,
-            UIColor.green,
-            UIColor.blue,
-            UIColor.purple
-        ]
-
-        let color = colors[Int(arc4random_uniform(UInt32(colors.count)))]
-        return color
-    }
-
-    func richEditorToolbarChangeTextColor(_ toolbar: RichEditorToolbar) {
-        let color = randomColor()
-        toolbar.editor?.setTextColor(color)
-    }
-
-    func richEditorToolbarChangeBackgroundColor(_ toolbar: RichEditorToolbar) {
-        let color = randomColor()
-        toolbar.editor?.setTextBackgroundColor(color)
-    }
-
-    func richEditorToolbarInsertImage(_ toolbar: RichEditorToolbar) {
-        toolbar.editor?.insertImage("https://gravatar.com/avatar/696cf5da599733261059de06c4d1fe22", alt: "Gravatar")
-    }
-
-    func richEditorToolbarInsertLink(_ toolbar: RichEditorToolbar) {
-        // Can only add links to selected text, so make sure there is a range selection first
-//        if let hasSelection = toolbar.editor?.rangeSelectionExists(), hasSelection {
-//            toolbar.editor?.insertLink("http://github.com/cjwirth/RichEditorView", title: "Github Link")
-//        }
-    }
+    
 }

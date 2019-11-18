@@ -130,8 +130,12 @@ RE.removeFormat = function() {
     document.execCommand('removeFormat', false, null);
 };
 
-RE.setFontSize = function(size) {
+RE.setFontSizePx = function(size) {
     RE.editor.style.fontSize = size;
+};
+
+RE.setFontSize = function(size) {
+    document.execCommand('fontSize', false, size);
 };
 
 RE.setBackgroundColor = function(color) {
@@ -222,6 +226,10 @@ RE.setJustifyCenter = function() {
 
 RE.setJustifyRight = function() {
     document.execCommand('justifyRight', false, null);
+};
+
+RE.setJustifyFull = function() {
+    document.execCommand('justifyFull', false, null);
 };
 
 RE.getLineHeight = function() {
