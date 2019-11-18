@@ -60,6 +60,7 @@ body {
     position: absolute;
     top: 0px;
     color: #ccc;
+    padding: 10px 4px 10px 4px;
 }
 
 p, ul, ol {
