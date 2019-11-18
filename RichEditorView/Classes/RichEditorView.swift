@@ -243,8 +243,12 @@
             runJS("RE.removeFormat()")
         }
         
-        public func setFontSize(_ size: Int) {
+        public func setFontSizePx(_ size: Int) {
             runJS("RE.setFontSize('\(size)px')")
+        }
+        
+        public func setFontSize(_ size: Int) {
+            runJS("RE.setFontSize('\(size)')")
         }
         
         public func setEditorBackgroundColor(_ color: UIColor) {
@@ -336,6 +340,10 @@
         
         public func alignRight() {
             runJS("RE.setJustifyRight()")
+        }
+        
+        public func alignJustify() {
+            runJS("RE.setJustifyFull()")
         }
         
         public func insertImage(_ url: String, alt: String) {

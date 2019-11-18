@@ -1,15 +1,22 @@
 PODS:
-  - RichEditorView (5.1.1)
+  - Gridicons (0.19)
+  - RichEditorView (5.1.1):
+    - Gridicons (~> 0.19)
 
 DEPENDENCIES:
   - RichEditorView (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Gridicons
 
 EXTERNAL SOURCES:
   RichEditorView:
     :path: "../"
 
 SPEC CHECKSUMS:
-  RichEditorView: f7f5cdb2e1bd5b42c3e284be0b0e8c4e3257a0a0
+  Gridicons: dc92efbe5fd60111d2e8ea051d84a60cca552abc
+  RichEditorView: 19c12c6479ee452d765ca0586e6447f7abf5069e
 
 PODFILE CHECKSUM: cb2ef857fe6d826f0a9974fbfdb83ee1fbc5e9cb
 
